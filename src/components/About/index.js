@@ -1,113 +1,86 @@
+/* eslint-disable react/no-unknown-property */
 import {Component} from 'react'
+
 import Loader from 'react-loader-spinner'
+
 import Header from '../Header'
+
+import FaqItem from '../FaqItem'
+
 import Footer from '../Footer'
-import FaqsList from '../FaqsList'
-import FactsList from '../FactsList'
+
 import './index.css'
 
+const apiStatusConstants = {
+  initial: 'INITIAL',
+  progress: 'IN_PROGRESS',
+  success: 'SUCCESS',
+}
+
 class About extends Component {
-  state = {
-    isLoading: true,
-    faqData: {},
-    factsData: {},
-  }
+  state = {apiStatus: apiStatusConstants.initial, faqList: []}
 
   componentDidMount() {
-    this.getAllAboutData()
+    this.getAboutContent()
   }
 
-  renderloader = () => (
-    <>
-      <div className="loader-container" data-testid="aboutRouteLoader">
-        <Loader type="ThreeDots" color="#ffffff" height="50" width="50" />
-      </div>
-    </>
-  )
-
-  getAllAboutData = async () => {
-    const apiUrl = 'https://apis.ccbp.in/covid19-faqs'
-    const options = {
-      method: 'GET',
-    }
-
-    const response = await fetch(apiUrl, options)
+  getAboutContent = async () => {
+    this.setState({apiStatus: apiStatusConstants.progress})
+    const url = 'https://apis.ccbp.in/covid19-faqs'
+    const response = await fetch(url)
     if (response.ok) {
-      const data = await response.json()
-
-      const updateFactoidsData = data.factoids.map(each => ({
-        banner: each.banner,
-        id: each.id,
-      }))
-      const updateFaqsData = data.faq.map(each => ({
-        answer: each.answer,
-        category: each.category,
-        qno: each.qno,
-        question: each.question,
-      }))
-
-      this.setState({
-        faqData: updateFaqsData,
-        factsData: updateFactoidsData,
-        isLoading: false,
-      })
-    } else {
-      console.log('data not available')
+      const fetchedData = await response.json()
+      const {faq} = fetchedData
+      console.log(fetchedData)
+      this.setState({apiStatus: apiStatusConstants.success, faqList: faq})
     }
   }
 
-  renderAllData = () => {
-    const {faqData, factsData} = this.state
-    return (
-      <>
-        <ul data-testid="faqsUnorderedList" className="factlist">
-          {faqData.map(each => (
-            <FaqsList
-              key={each.qno}
-              answer={each.answer}
-              question={each.question}
-            />
-          ))}
-        </ul>
+  renderAboutRouteContent = () => {
+    const {faqList} = this.state
+    console.log('faq', faqList)
 
-        <h1 className="about-vaccine-title">Facts</h1>
-        <ul className="factlist">
-          {factsData.map(each => (
-            <FactsList key={each.id} banner={each.banner} />
-          ))}
-        </ul>
-      </>
+    return (
+      <div className="about-content-bg-container">
+        <div className="about-content-container">
+          <h1 className="about-heading">About</h1>
+          <p className="about-last-updated ">Last update on march 28th 2021.</p>
+          <p className="distribution-text">
+            COVID-19 vaccines be ready for distribution
+          </p>
+          <ul className="faq-list" testid="faqsUnorderedList">
+            {faqList.map(eachFaq => (
+              <FaqItem key={eachFaq.qno} faqItem={eachFaq} />
+            ))}
+          </ul>
+        </div>
+      </div>
     )
   }
 
-  //   renderFactsData = () => {
-  //     const {factsData} = this.state
-  //     return (
-  //       <>
+  renderAboutRouteLoader = () => (
+    <div className="state-loader-container" testid="aboutRouteLoader">
+      <Loader type="TailSpin" color="#007BFF" width={50} height={50} />
+    </div>
+  )
 
-  //         {factsData.map(each => (
-  //           <FactsList key={each.id} banner={each.banner} />
-  //         ))}
-  //       </>
-  //     )
-  //   }
+  renderApiStatusContent = () => {
+    const {apiStatus} = this.state
+
+    switch (apiStatus) {
+      case apiStatusConstants.success:
+        return this.renderAboutRouteContent()
+      default:
+        return this.renderAboutRouteLoader()
+    }
+  }
 
   render() {
-    const {isLoading} = this.state
     return (
-      <div className="main-container">
+      <div className="about-route">
         <Header />
-        <div className="container">
-          <div className="about-container">
-            <h1 className="about-title">About</h1>
-            <p className="about-description">Last update on march 28th 2021.</p>
-            <p className="about-vaccine-title">
-              COVID-19 vaccines be ready for distribution
-            </p>
-            <div className="factlist">
-              {isLoading ? this.renderloader() : this.renderAllData()}
-            </div>
-          </div>
+        {this.renderApiStatusContent()}
+        <div className="footer-container-1">
           <Footer />
         </div>
       </div>

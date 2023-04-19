@@ -1,48 +1,85 @@
-.not-found-data {
-  height: 100%;
-  width: 100vw;
-  background-color: #161625;
+.not-found-route {
+  width: 100%;
+  height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-}
-
-.container-not-found {
-  height: 100vh;
-  overflow: hidden;
+  background-color: #161625;
 }
 
 .not-found-image {
-}
-.not-found-title {
-  font-family: Roboto;
-  font-style: normal;
-  font-weight: 500;
-  font-size: 32px;
-  line-height: 48px;
-  text-align: center;
-  color: #cbd5e1;
+  width: 242px;
+  height: 162px;
 }
 
-.not-found-para {
-  font-family: Roboto;
+@media screen and (min-width: 768px) {
+  .not-found-image {
+    width: 448px;
+    height: 300px;
+  }
+}
+
+.not-found-heading {
+  font-family: 'Roboto';
   font-style: normal;
-  font-weight: normal;
-  font-size: 20px;
-  line-height: 32px;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 24px;
+  text-align: center;
+  color: #e2e8f0;
+}
+
+@media screen and (min-width: 768px) {
+  .not-found-heading {
+    font-size: 32px;
+    line-height: 48px;
+  }
+}
+
+.not-found-description {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 20px;
   text-align: center;
   color: #94a3b8;
 }
 
-.home-button {
-  background: #2563eb;
-  border-radius: 12px;
-  color: #ffffff;
-  padding: 12px 24px;
-  border: none;
+@media screen and (min-width: 768px) {
+  .not-found-description {
+    font-size: 20px;
+    line-height: 32px;
+  }
 }
 
-.button-container {
-  text-align: center;
+.not-found-button {
+  border: none;
+  outline: none;
+  cursor: pointer;
+  align-items: center;
+  padding: 8px 16px;
+  width: 66px;
+  height: 32px;
+  background: #2563eb;
+  border-radius: 8px;
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 12px;
+  line-height: 16px;
+  color: #ffffff;
+}
+
+@media screen and (min-width: 768px) {
+  .not-found-button {
+    padding: 12px 24px;
+    width: 88px;
+    height: 48px;
+    background: #2563eb;
+    border-radius: 12px;
+    font-size: 14px;
+    line-height: 24px;
+  }
 }
